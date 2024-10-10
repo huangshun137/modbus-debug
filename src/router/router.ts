@@ -4,13 +4,23 @@ import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
-    name: "Home",
-    component: () => import("@/views/home.vue"),
+    redirect: "/modbus-list",
   },
   {
     path: "/storeTest",
     name: "StoreTest",
     component: () => import("@/views/storeTest.vue"),
+  },
+  {
+    path: "/modbus-list",
+    name: "ModbusList",
+    component: () => import("@/views/modbusList/index.vue"),
+  },
+  {
+    path: "/modbus-detail/:id",
+    name: "ModbusDetail",
+    component: () => import("@/views/modbusDetail/index.vue"),
+    props: true,
   },
   // {
   //   path: "/about",

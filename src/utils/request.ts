@@ -9,7 +9,7 @@ interface NewAxiosRequestConfig extends InternalAxiosRequestConfig {
 
 const service = axios.create({
   // axios中请求配置有baseURL选项，表示请求URL公共部分
-  baseURL: import.meta.env.VITE_APP_BASE_API,
+  // baseURL: import.meta.env.VITE_APP_BASE_API,
   // 超时
   timeout: 60000,
   headers: {
@@ -118,7 +118,7 @@ const loadingColse = () => {
 service.interceptors.response.use(
   (res) => {
     // console.log(res);
-    loadingColse();
+    (res.config as NewAxiosRequestConfig).isLoading && loadingColse();
     const requestStore = useRequestStore();
     requestStore.deleteRequest(res.config.url!, res.config.method!);
     // 未设置状态码则默认成功状态
@@ -175,7 +175,7 @@ service.interceptors.response.use(
     }
   },
   (error) => {
-    console.log("err" + error);
+    console.log("error::::", error);
     let { message } = error;
     if (message === "Network Error") {
       message = "后端接口连接异常";
@@ -186,6 +186,7 @@ service.interceptors.response.use(
     }
     //message为canceled时就是取消当前请求
     if (message != "canceled") {
+      (error.config as NewAxiosRequestConfig).isLoading && loadingColse();
       ElMessage({
         message: message,
         type: "error",
